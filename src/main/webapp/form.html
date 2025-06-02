@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голосование</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        .options {
+            margin: 15px 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Голосование</h1>
+<form method="POST" action="vote">
+    <h2>Лучший исполнитель</h2>
+    <div class="options">
+        <label><input type="radio" name="artist" value="Руки Вверх" required> "Руки Вверх"</label><br>
+        <label><input type="radio" name="artist" value="Mikaya"> "Mikaya"</label><br>
+        <label><input type="radio" name="artist" value="Chase & status"> "Chase & status"</label><br>
+        <label><input type="radio" name="artist" value="Alon"> "Alon"</label>
+    </div>
+
+    <h2>Ваши любимые жанры (выберите 3-5 вариантов)</h2>
+    <div class="options">
+        <label><input type="checkbox" name="genres" value="reggae"> reggae</label><br>
+        <label><input type="checkbox" name="genres" value="rock"> rock</label><br>
+        <label><input type="checkbox" name="genres" value="pop"> pop</label><br>
+        <label><input type="checkbox" name="genres" value="classical"> classical</label><br>
+        <label><input type="checkbox" name="genres" value="hip hop"> hip hop</label><br>
+        <label><input type="checkbox" name="genres" value="r&b"> r&b</label><br>
+        <label><input type="checkbox" name="genres" value="d&b"> d&b</label><br>
+        <label><input type="checkbox" name="genres" value="electronic"> electronic</label><br>
+        <label><input type="checkbox" name="genres" value="indie"> indie</label><br>
+        <label><input type="checkbox" name="genres" value="techno"> techno</label>
+    </div>
+
+    <h2>Краткий текст о вас</h2>
+    <label>
+        <textarea name="comment" placeholder="Напишите несколько слов о себе..." required></textarea>
+    </label><br>
+
+    <button type="submit">Проголосовать</button>
+</form>
+</body>
+</html>
