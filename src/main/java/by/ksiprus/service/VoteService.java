@@ -1,40 +1,42 @@
 package by.ksiprus.service;
 
-import by.ksiprus.dto.Vote;
 import by.ksiprus.dto.Stats;
+import by.ksiprus.dto.Vote;
 import by.ksiprus.service.api.IVoteService;
-import by.ksiprus.storage.IVoteStorage;
+import by.ksiprus.storage.VoteStorageRam;
+import by.ksiprus.storage.api.IVoteStorage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class VoteService implements IVoteService {
-    private final IVoteStorage storage;
-
-    public VoteService(IVoteStorage storage) {
-        this.storage = storage;
-    }
+    private static final IVoteStorage storage = new VoteStorageRam();
 
     @Override
-    public void addVote(Vote vote) {
-        storage.add(vote);
+    public void add(Vote vote) {
+        this.storage.add(vote);
     }
 
     @Override
     public Stats getStats() {
-        List<Vote> votes = storage.getAll();
 
-        Map<String, Integer> authors = new HashMap<>();
-        Map<String, Integer> genres = new HashMap<>();
+        Map<String, Integer> artistStats = new HashMap<>();
+        Map<String, Integer> genresStats = new HashMap<>();
         List<String> abouts = new ArrayList<>();
 
-        for (Vote vote : votes) {
-            authors.merge(vote.getArtist(), 1, Integer::sum);
-            genres.merge(vote.getGenre(), 1, Integer::sum);
-            if (vote.getAbout() != null && !vote.getAbout().isBlank()) {
-                abouts.add(vote.getAbout());
-            }
-        }
+        List<Vote> all = storage.getAll();
 
-        return new Stats(authors, genres, abouts);
+        for (Vote vote : all) {
+            artistStats.compute(vote.getArtist(), (key, value)
+                    -> value == null ? 1 : value + 1);
+            for (String genre : vote.getGenres()) {
+                genresStats.compute(genre, (key, value)
+                        -> value == null ? 1 : value + 1);
+            }
+            abouts.add(vote.getAbout() + ": " + vote.getDtCreate());
+        }
+        return new Stats(artistStats, genresStats, abouts);
     }
 }
