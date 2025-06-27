@@ -9,6 +9,10 @@ public class Vote {
     private List<String> genres;
     private String about;
 
+    public Vote() {
+
+    }
+
     public LocalDateTime getDtCreate() {
         return dtCreate;
     }
