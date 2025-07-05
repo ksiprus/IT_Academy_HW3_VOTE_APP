@@ -4,8 +4,10 @@ import by.ksiprus.dto.Vote;
 import by.ksiprus.storage.api.IVoteStorage;
 import by.ksiprus.utils.ConnectionManager;
 
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +40,7 @@ public class VoteStoragePostgres implements IVoteStorage {
 
     @Override
     public List<Vote> getAll() {
-        List<Vote> votesResult = new ArrayList<>();
+        List<Vote> votes = new ArrayList<>();
         String sql = "SELECT dt_create, artist, genres, about FROM vote_app.vote";
 
         try (Connection connection = ConnectionManager.openConnection();
@@ -46,23 +48,16 @@ public class VoteStoragePostgres implements IVoteStorage {
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                LocalDateTime dtCreate = resultSet.getObject("dt_create", LocalDateTime.class);
-                String artist = resultSet.getString("artist");
-                String[] genres = (String[]) resultSet.getArray("genres").getArray();
-                String about = resultSet.getString("about");
-
-
                 Vote vote = new Vote();
-                vote.setDtCreate(dtCreate);
-                vote.setArtist(artist);
-                vote.setGenres(Arrays.asList(genres));
-                vote.setAbout(about);
-                votesResult.add(vote);
+                vote.setDtCreate(resultSet.getTimestamp("dt_create").toLocalDateTime());
+                vote.setArtist(resultSet.getString("artist"));
+                vote.setGenres(Arrays.asList((String[]) resultSet.getArray("genres").getArray()));
+                vote.setAbout(resultSet.getString("about"));
+                votes.add(vote);
             }
-
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при получении списка голосов", e);
+            throw new RuntimeException("Ошибка при получении голосов", e);
         }
-        return votesResult;
+        return votes;
     }
 }
