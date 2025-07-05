@@ -9,7 +9,7 @@ import by.ksiprus.storage.api.IVoteStorage;
 import java.util.*;
 
 public class VoteService implements IVoteService {
-    private final IVoteStorage storage;
+    private IVoteStorage storage;
 
     public VoteService() {
         this.storage = new VoteStoragePostgres();
@@ -42,7 +42,7 @@ public class VoteService implements IVoteService {
             }
 
 
-            abouts.add(String.format("Artist: %s, About: %s, Date: %s", vote.getArtist(), vote.getAbout(), vote.getDtCreate()));
+            abouts.add(String.format("About: %s, Date: %s", vote.getAbout(), vote.getDtCreate()));
         }
 
         return new Stats(artistStats, genresStats, abouts);
