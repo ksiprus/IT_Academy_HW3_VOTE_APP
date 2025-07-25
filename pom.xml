@@ -65,8 +65,8 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <server>TomcatServer</server>
-                    <username>admin</username>
-                    <password>admin</password>
+                    <username>tomcat_script</username>
+                    <password>tomcat_script</password>
                     <path>/${project.build.finalName}</path>
                 </configuration>
             </plugin>
